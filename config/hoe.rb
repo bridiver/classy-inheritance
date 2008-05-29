@@ -34,7 +34,7 @@ end
 REV = nil
 # UNCOMMENT IF REQUIRED:
 # REV = YAML.load(`svn info`)['Revision']
-VERS = Classy-inheritance::VERSION::STRING + (REV ? ".#{REV}" : "")
+VERS = ClassyInheritance::VERSION::STRING + (REV ? ".#{REV}" : "")
 RDOC_OPTS = ['--quiet', '--title', 'classy-inheritance documentation',
     "--opname", "index.html",
     "--line-numbers",

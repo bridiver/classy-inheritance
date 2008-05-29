@@ -17,7 +17,7 @@ module ActiveRecord::Validations::ClassMethods
 end
 
 module Stonean
-  module DependsOn
+  module ClassyInheritance
     def self.included(base)
       base.extend Stonean::ClassyInheritance::ClassMethods
     end
