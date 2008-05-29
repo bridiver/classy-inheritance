@@ -1,83 +1,63 @@
-h1. classy inheritance
+h1. <a href="http://lockdown.rubyforge.org">Classy Inheritance</a>
 
-h1. &#x2192; 'classy-inheritance'
-
+<i>You stay classy Inheritance</i>
 
 h2. What
 
+For now, Classy Inheritance adds a depends_on class method to your ActiveRecord model so that you can define requisite objects. 
+More functionality coming for optional relationships.
+
+You can define the relationship to be polymorphic:
+<pre>
+class Picture < ActiveRecord::Base
+  depends_on :image, :attrs => [:filename, :height, :width], :as => "imageable"
+end
+</pre>
+
+This will look for "imageable_type" and "imageable_id" on the images table add set them accordingly.
+
+Or you can define a standard belongs_to relationship:
+<pre>
+class User < ActiveRecord::Base
+  depends_on :profile, :attrs => [:first_name, :last_name, :email]
+end
+</pre>
+
+h3. What does it do for me?
+
+Well, for starters you get pass-through methods added to your model.  So, in the above User example you would get the following:
+
+<pre>
+  @user.first_name
+  @user.last_name
+  @user.email
+  @user.first_name=
+  @user.last_name=
+  @user.email=
+</pre>
+
+This means you can use these attributes on your form and in your controller instead of having to worry about creating/updating a separate Profile model.  
+
+For the above example, you'll also get a "find_with_profile" class method that will do the :include => :profile addition to your find call for you.
 
 h2. Installing
 
-<pre syntax="ruby">sudo gem install classy-inheritance</pre>
+<pre>
+$ sudo gem install classy-inheritance
 
-h2. The basics
+# in environment.rb add:
+require "classy-inheritance"
 
-
-h2. Demonstration of usage
-
-
-
-h2. Forum
-
-"http://groups.google.com/group/classy-inheritance":http://groups.google.com/group/classy-inheritance
-
-TODO - create Google Group - classy-inheritance
+</pre>
 
 h2. How to submit patches
 
+The Clone URL: git://github.com/stonean/classy-inheritance.git
+
 Read the "8 steps for fixing other people's code":http://drnicwilliams.com/2007/06/01/8-steps-for-fixing-other-peoples-code/ and for section "8b: Submit patch to Google Groups":http://drnicwilliams.com/2007/06/01/8-steps-for-fixing-other-peoples-code/#8b-google-groups, use the Google Group above.
 
-TODO - pick SVN or Git instructions
-
-The trunk repository is <code>svn://rubyforge.org/var/svn/classy-inheritance/trunk</code> for anonymous access.
-
-OOOORRRR
-
-You can fetch the source from either:
-
-<% if rubyforge_project_id %>
-
-* rubyforge: "http://rubyforge.org/scm/?group_id=<%= rubyforge_project_id %>":http://rubyforge.org/scm/?group_id=<%= rubyforge_project_id %>
-
-<pre>git clone git://rubyforge.org/classy-inheritance.git</pre>
-
-<% else %>
-
-* rubyforge: MISSING IN ACTION
-
-TODO - You can not created a RubyForge project, OR have not run <code>rubyforge config</code>
-yet to refresh your local rubyforge data with this projects' id information.
-
-When you do this, this message will magically disappear!
-
-Or you can hack website/index.txt and make it all go away!!
-
-<% end %>
-
-* github: "http://github.com/GITHUB_USERNAME/classy-inheritance/tree/master":http://github.com/GITHUB_USERNAME/classy-inheritance/tree/master
-
-<pre>git clone git://github.com/GITHUB_USERNAME/classy-inheritance.git</pre>
-
-
-TODO - add "github_username: username" to ~/.rubyforge/user-config.yml and newgem will reuse it for future projects.
-
-
-* gitorious: "git://gitorious.org/classy-inheritance/mainline.git":git://gitorious.org/classy-inheritance/mainline.git
-
-<pre>git clone git://gitorious.org/classy-inheritance/mainline.git</pre>
-
-h3. Build and test instructions
-
-<pre>cd classy-inheritance
-rake test
-rake install_gem</pre>
-
+I'm new to git and this whole opensource project admin gig, so please be patient with my stumbling around.
 
 h2. License
 
-This code is free to use under the terms of the MIT license. 
-
-h2. Contact
-
-Comments are welcome. Send an email to "FIXME full name":mailto:FIXME email via the "forum":http://groups.google.com/group/classy-inheritance
-
+This code is free to use under the terms of the MIT license.

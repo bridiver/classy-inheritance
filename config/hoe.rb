@@ -67,7 +67,9 @@ $hoe = Hoe.new(GEM_NAME, VERS) do |p|
   end
 
 CHANGES = $hoe.paragraphs_of('History.txt', 0..1).join("\\n\\n")
-PATH    = (RUBYFORGE_PROJECT == GEM_NAME) ? RUBYFORGE_PROJECT : "#{RUBYFORGE_PROJECT}/#{GEM_NAME}"
+#PATH    = (RUBYFORGE_PROJECT == GEM_NAME) ? RUBYFORGE_PROJECT : "#{RUBYFORGE_PROJECT}/#{GEM_NAME}"
+PATH    = RUBYFORGE_PROJECT
 $hoe.remote_rdoc_dir = File.join(PATH.gsub(/^#{RUBYFORGE_PROJECT}\/?/,''), 'rdoc')
-$hoe.rsync_args = '-av --delete --ignore-errors'
+#$hoe.rsync_args = '-av --delete --ignore-errors'
+$hoe.rsync_args = '-av --delete'
 $hoe.spec.post_install_message = File.open(File.dirname(__FILE__) + "/../PostInstall.txt").read rescue ""

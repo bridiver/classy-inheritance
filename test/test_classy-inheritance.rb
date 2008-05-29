@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/test_helper.rb'
 
-class TestClassy-inheritance < Test::Unit::TestCase
+class TestClassyInheritance < Test::Unit::TestCase
 
   def setup
   end
