@@ -1,2 +1,4 @@
+== 0.1.1 2008-05-30
+  * Fix:  Merge when other conditionals are passed to the find_with method was incorrectly called without bang!
 == 0.1.0 2008-05-29
   * Initial release

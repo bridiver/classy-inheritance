@@ -32,7 +32,8 @@ module Stonean
         # Before save functionality to create/update the requisite object
         define_save_method(model_sym, options[:as])
 
-        define_find_method(model_sym)
+        # Adds a find_with_<model_sym> class method
+        define_find_with_method(model_sym)
 
 
         options[:attrs].each{|attr| define_accessors(model_sym, attr)}
@@ -61,7 +62,7 @@ module Stonean
         before_save "save_requisite_#{model_sym}".to_sym
       end
 
-      def define_find_method(model_sym)
+      def define_find_with_method(model_sym)
         self.class.send :define_method, "find_with_#{model_sym}" do |*args|
           eval <<-CODE
             if args[1] && args[1].is_a?(Hash)
@@ -70,7 +71,7 @@ module Stonean
                 new_val = inc_val.is_a?(Array) ? inc_val.push(:#{:model_sym}) : [inc_val, :#{model_sym}] 
                 args[1][:include] = new_val
               else
-                args[1].merge({:include => :#{model_sym}})
+                args[1].merge!({:include => :#{model_sym}})
               end
             else
               args << {:include => :#{model_sym}}
@@ -101,7 +102,6 @@ module Stonean
         { :foreign_key => "#{polymorphic_name}_id",
           :conditions => "#{polymorphic_name}_type = '#{self.name}'"}
       end
-
     end # ClassMethods
   end # ClassyInheritance module
 end # Stonean module
