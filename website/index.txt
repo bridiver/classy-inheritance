@@ -2,6 +2,14 @@ h1. <a href="http://lockdown.rubyforge.org">Classy Inheritance</a>
 
 <i>"You stay classy, inheritance" - Gibson</i>  
 
+h2. Consolidation of information
+
+Maintaining this page, the wiki at GitHub, the Google Group and no issue tracker is not an ideal setup.  So, everything is moving to "stonean.com":http://stonean.com where I'm giving "Redmine":http://redmine.org a shot a running everything for me. I'll be posting release announcements to the news feed for each project and keeping the docs up-to-date.  Hopefully this will be better for everyone.
+
+Thanks for your interest in Classy Inheritance,<br/>
+-andy
+
+
 h2. What
 
 For now, Classy Inheritance adds a depends_on class method to your ActiveRecord model so that you can define requisite objects. 

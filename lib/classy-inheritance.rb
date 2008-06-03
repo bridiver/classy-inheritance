@@ -35,12 +35,33 @@ module Stonean
         # Adds a find_with_<model_sym> class method
         define_find_with_method(model_sym)
 
+        if options[:as]
+          define_can_be_method_on_requisite_class(model_sym, options[:as])
+        end
 
         options[:attrs].each{|attr| define_accessors(model_sym, attr)}
       end
 
-      #model_instance = instance_variable_get("@#{model_sym}")
       private
+
+      def can_be(model_sym, options = {})
+        unless options[:as]
+          raise ArgumentError, ":as attribute required when calling can_be"
+        end
+
+        klass = model_sym.to_s.classify
+
+        define_method "is_a_#{model_sym}?" do
+          eval("self.#{options[:as]}_type == '#{klass}'")
+        end
+
+        find_with_method = "find_with_#{self.name.underscore}"
+
+        define_method "as_a_#{model_sym}" do
+          eval("#{klass}.send(:#{find_with_method},self.#{options[:as]}_id)")
+        end
+      end
+
       def define_relationship(model_sym, options)
         if options[:as]
           has_one model_sym, polymorphic_constraints(options[:as])
@@ -96,6 +117,13 @@ module Stonean
 
           eval("self.#{model_sym}.#{attr}= val")
         end
+      end
+
+      def define_can_be_method_on_requisite_class(model_sym, polymorphic_name)
+        klass = model_sym.to_s.classify
+        requisite_klass = eval(klass)
+        requisite_klass.send :can_be, self.name.underscore, 
+                                      :as => polymorphic_name 
       end
 
       def polymorphic_constraints(polymorphic_name)
