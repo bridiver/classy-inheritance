@@ -42,7 +42,6 @@ module Stonean
         options[:attrs].each{|attr| define_accessors(model_sym, attr)}
       end
 
-      private
 
       def can_be(model_sym, options = {})
         unless options[:as]
@@ -61,6 +60,8 @@ module Stonean
           eval("#{klass}.send(:#{find_with_method},self.#{options[:as]}_id)")
         end
       end
+
+      private
 
       def define_relationship(model_sym, options)
         if options[:as]
@@ -122,8 +123,10 @@ module Stonean
       def define_can_be_method_on_requisite_class(model_sym, polymorphic_name)
         klass = model_sym.to_s.classify
         requisite_klass = eval(klass)
-        requisite_klass.send :can_be, self.name.underscore, 
+        unless requisite_klass.respond_to?(self.name.underscore.to_sym)
+          requisite_klass.send :can_be, self.name.underscore, 
                                       :as => polymorphic_name 
+        end
       end
 
       def polymorphic_constraints(polymorphic_name)

@@ -1,3 +1,6 @@
+== 0.2.1 2008-06-09
+  * Add: exposed :can_be method.  Can now define what the polymorphic class can be with these methods.  This will add the "is_a_<model>?" and "as_a_<model>" methods.
+  * Add: respond_to? :can_be test before adding to requisite class
 == 0.2.0 2008-06-02
   * Add:  When defining a depends_on that is polymorhic the requisite class has two methods added: "is_a_<model>?" and "as_a_<model>".
 == 0.1.1 2008-05-30
