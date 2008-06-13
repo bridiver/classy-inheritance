@@ -58,14 +58,20 @@ require "classy-inheritance"
 
 </pre>
 
-h2. How to submit patches
+h2. Github
 
 The Clone URL: git://github.com/stonean/classy-inheritance.git
 
-Read the "8 steps for fixing other people's code":http://drnicwilliams.com/2007/06/01/8-steps-for-fixing-other-peoples-code/ and for section "8b: Submit patch to Google Groups":http://drnicwilliams.com/2007/06/01/8-steps-for-fixing-other-peoples-code/#8b-google-groups, use the Google Group above.
+Read the "8 steps for fixing other people's code":http://drnicwilliams.com/2007/06/01/8-steps-for-fixing-other-peoples-code/.
 
 I'm new to git and this whole opensource project admin gig, so please be patient with my stumbling around.
+
+h2. Contact
+
+Please use the "forum":http://stonean.com/projects/classy-inheritance/boards to ask questions and the "issue tracker":http://stonean.com/projects/classy-inheritance/issues to report problems or submit a pull request.
 
 h2. License
 
 This code is free to use under the terms of the MIT license.
+
+Copyright (c) 2008 Andrew Stone

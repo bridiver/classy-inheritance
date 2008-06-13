@@ -1,3 +1,5 @@
+== 0.3.0 2008-06-12
+  * Add: :prefix parameter to depends_on call.  So if you have User.depends_on(:profile, :attrs => [:first_name], :prefix => true), your user model will have @user.profile_first_name.  This is to avoid name collisions with requisite classes.
 == 0.2.1 2008-06-09
   * Add: exposed :can_be method.  Can now define what the polymorphic class can be with these methods.  This will add the "is_a_<model>?" and "as_a_<model>" methods.
   * Add: respond_to? :can_be test before adding to requisite class
