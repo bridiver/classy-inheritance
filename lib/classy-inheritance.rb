@@ -82,7 +82,9 @@ module Stonean
             eval("self.#{model_sym}.#{polymorphic_name}_id = self.id")
           end
 
-          eval("self.#{model_sym}.save")
+          unless polymorphic_name
+            eval("self.#{model_sym}.save")
+          end
         end
 
         before_save "save_requisite_#{model_sym}".to_sym

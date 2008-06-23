@@ -1,3 +1,5 @@
+== 0.4.1 2008-06-23
+  * Fix: removed extra save call for polymorphic associations.  rails handles the save on a has_one relationship
 == 0.4.0 2008-06-23
   * Add: support for other options such as :dependent and :class_name
 == 0.3.0 2008-06-12
