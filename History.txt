@@ -1,3 +1,5 @@
+== 0.4.0 2008-06-23
+  * Add: support for other options such as :dependent and :class_name
 == 0.3.0 2008-06-12
   * Add: :prefix parameter to depends_on call.  So if you have User.depends_on(:profile, :attrs => [:first_name], :prefix => true), your user model will have @user.profile_first_name.  This is to avoid name collisions with requisite classes.
 == 0.2.1 2008-06-09

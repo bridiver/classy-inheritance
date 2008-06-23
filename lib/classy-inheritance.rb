@@ -64,10 +64,14 @@ module Stonean
       private
 
       def define_relationship(model_sym, options)
-        if options[:as]
-          has_one model_sym, polymorphic_constraints(options[:as])
+        opts = options.dup
+        opts.delete(:attrs)
+        if opts[:as]
+          as_opt = opts.delete(:as)
+          opts = polymorphic_constraints(as_opt).merge(opts)
+          has_one model_sym, opts
         else
-          belongs_to model_sym
+          belongs_to model_sym, opts
         end
       end
 
