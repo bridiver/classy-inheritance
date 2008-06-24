@@ -82,7 +82,13 @@ module Stonean
             eval("self.#{model_sym}.#{polymorphic_name}_id = self.id")
           end
 
-          unless polymorphic_name
+          if polymorphic_name
+            eval <<-SAVEIT
+              unless self.#{model_sym}.new_record?
+                self.#{model_sym}.save
+              end
+            SAVEIT
+          else
             eval("self.#{model_sym}.save")
           end
         end

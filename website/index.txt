@@ -6,72 +6,11 @@ h2. Consolidation of information
 
 Maintaining this page, the wiki at GitHub, the Google Group and no issue tracker is not an ideal setup.  So, everything is moving to "stonean.com":http://stonean.com where I'm giving "Redmine":http://redmine.org a shot a running everything for me. I'll be posting release announcements to the news feed for each project and keeping the docs up-to-date.  Hopefully this will be better for everyone.
 
+h2. Quick links
+
+"Wiki":http://stonean.com/wiki/classy-inheritance
+
+"Forum":http://stonean.com/projects/classy-inheritance/boards
+
 Thanks for your interest in Classy Inheritance,<br/>
 -andy
-
-
-h2. What
-
-For now, Classy Inheritance adds a depends_on class method to your ActiveRecord model so that you can define requisite objects. 
-More functionality coming for optional relationships.
-
-You can define the relationship to be polymorphic:
-<pre>
-class Picture < ActiveRecord::Base
-  depends_on :image, :attrs => [:filename, :height, :width], :as => "imageable"
-end
-</pre>
-
-This will look for "imageable_type" and "imageable_id" on the images table add set them accordingly.
-
-Or you can define a standard belongs_to relationship:
-<pre>
-class User < ActiveRecord::Base
-  depends_on :profile, :attrs => [:first_name, :last_name, :email]
-end
-</pre>
-
-h3. What does it do for me?
-
-Well, for starters you get pass-through methods added to your model.  So, in the above User example you would get the following:
-
-<pre>
-  @user.first_name
-  @user.last_name
-  @user.email
-  @user.first_name=
-  @user.last_name=
-  @user.email=
-</pre>
-
-This means you can use these attributes on your form and in your controller instead of having to worry about creating/updating a separate Profile model.  
-
-For the above example, you'll also get a "find_with_profile" class method that will do the :include => :profile addition to your find call for you.
-
-h2. Installing
-
-<pre>
-$ sudo gem install classy-inheritance
-
-# in environment.rb add:
-require "classy-inheritance"
-
-</pre>
-
-h2. Github
-
-The Clone URL: git://github.com/stonean/classy-inheritance.git
-
-Read the "8 steps for fixing other people's code":http://drnicwilliams.com/2007/06/01/8-steps-for-fixing-other-peoples-code/.
-
-I'm new to git and this whole opensource project admin gig, so please be patient with my stumbling around.
-
-h2. Contact
-
-Please use the "forum":http://stonean.com/projects/classy-inheritance/boards to ask questions and the "issue tracker":http://stonean.com/projects/classy-inheritance/issues to report problems or submit a pull request.
-
-h2. License
-
-This code is free to use under the terms of the MIT license.
-
-Copyright (c) 2008 Andrew Stone

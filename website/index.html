@@ -33,7 +33,7 @@
     <h1>Classy Inheritance</h1>
     <div id="version" class="clickable" onclick='document.location = "http://rubyforge.org/projects/classyinherit"; return false'>
       <p>Get Version</p>
-      <a href="http://rubyforge.org/projects/classyinherit" class="numbers">0.4.1</a>
+      <a href="http://rubyforge.org/projects/classyinherit" class="numbers">0.4.2</a>
     </div>
     <p><i>&#8220;You stay classy, inheritance&#8221; &#8211; Gibson</i></p>
 
@@ -44,93 +44,19 @@
 	<p>Maintaining this page, the wiki at GitHub, the Google Group and no issue tracker is not an ideal setup.  So, everything is moving to <a href="http://stonean.com">stonean.com</a> where I&#8217;m giving <a href="http://redmine.org">Redmine</a> a shot a running everything for me. I&#8217;ll be posting release announcements to the news feed for each project and keeping the docs up-to-date.  Hopefully this will be better for everyone.</p>
 
 
+	<h2>Quick links</h2>
+
+
+	<p><a href="http://stonean.com/wiki/classy-inheritance">Wiki</a></p>
+
+
+	<p><a href="http://stonean.com/projects/classy-inheritance/boards">Forum</a></p>
+
+
 	<p>Thanks for your interest in Classy Inheritance,<br/>
 -andy</p>
-
-
-	<h2>What</h2>
-
-
-	<p>For now, Classy Inheritance adds a depends_on class method to your ActiveRecord model so that you can define requisite objects. 
-More functionality coming for optional relationships.</p>
-
-
-You can define the relationship to be polymorphic:
-<pre>
-class Picture &lt; ActiveRecord::Base
-  depends_on :image, :attrs =&gt; [:filename, :height, :width], :as =&gt; "imageable" 
-end
-</pre>
-
-	<p>This will look for &#8220;imageable_type&#8221; and &#8220;imageable_id&#8221; on the images table add set them accordingly.</p>
-
-
-Or you can define a standard belongs_to relationship:
-<pre>
-class User &lt; ActiveRecord::Base
-  depends_on :profile, :attrs =&gt; [:first_name, :last_name, :email]
-end
-</pre>
-
-	<h3>What does it do for me?</h3>
-
-
-	<p>Well, for starters you get pass-through methods added to your model.  So, in the above User example you would get the following:</p>
-
-
-<pre>
-  @user.first_name
-  @user.last_name
-  @user.email
-  @user.first_name=
-  @user.last_name=
-  @user.email=
-</pre>
-
-	<p>This means you can use these attributes on your form and in your controller instead of having to worry about creating/updating a separate Profile model.</p>
-
-
-	<p>For the above example, you&#8217;ll also get a &#8220;find_with_profile&#8221; class method that will do the :include =&gt; :profile addition to your find call for you.</p>
-
-
-	<h2>Installing</h2>
-
-
-<pre>
-$ sudo gem install classy-inheritance
-
-# in environment.rb add:
-require "classy-inheritance" 
-
-</pre>
-
-	<h2>Github</h2>
-
-
-	<p>The Clone <span class="caps">URL</span>: git://github.com/stonean/classy-inheritance.git</p>
-
-
-	<p>Read the <a href="http://drnicwilliams.com/2007/06/01/8-steps-for-fixing-other-peoples-code/">8 steps for fixing other people&#8217;s code</a>.</p>
-
-
-	<p>I&#8217;m new to git and this whole opensource project admin gig, so please be patient with my stumbling around.</p>
-
-
-	<h2>Contact</h2>
-
-
-	<p>Please use the <a href="http://stonean.com/projects/classy-inheritance/boards">forum</a> to ask questions and the <a href="http://stonean.com/projects/classy-inheritance/issues">issue tracker</a> to report problems or submit a pull request.</p>
-
-
-	<h2>License</h2>
-
-
-	<p>This code is free to use under the terms of the <span class="caps">MIT</span> license.</p>
-
-
-	<p>Copyright&#169; 2008 Andrew Stone</p>
     <p class="coda">
-      <a href="http://blog.stonean.com">Andrew Stone</a>, 11th June 2008<br>
+      <a href="http://blog.stonean.com">Andrew Stone</a>, 24th June 2008<br>
       Theme extended from <a href="http://rb2js.rubyforge.org/">Paul Battley</a>
     </p>
 </div>
