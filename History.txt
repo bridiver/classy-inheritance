@@ -1,3 +1,5 @@
+== 0.4.4 2008-06-24
+  * Fix: :class_name attribute was not being recognized
 == 0.4.3 2008-06-24
   * Fix: :prefix option was not being removed before passing option to has_one/belongs_to
 == 0.4.2 2008-06-24
