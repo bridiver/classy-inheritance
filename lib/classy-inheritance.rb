@@ -73,7 +73,7 @@ module Stonean
 
       def define_relationship(model_sym, options)
         opts = options.dup
-        [:attrs, :prefix].each{|key| opts.delete(key)}
+        [:attrs, :prefix, :required].each{|key| opts.delete(key)}
         if opts[:as]
           as_opt = opts.delete(:as)
           opts = polymorphic_constraints(as_opt).merge(opts)
