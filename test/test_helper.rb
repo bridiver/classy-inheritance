@@ -25,9 +25,17 @@ class SetupTestTables < ActiveRecord::Migration
 
       t.timestamps
     end
+    
+    create_table :authors, :force => true do |t|
+      t.string :login
+      t.integer :profile_id
+
+      t.timestamps
+    end
   end
   
   def self.down
+    drop_table :authors
     drop_table :users
     drop_table :profiles
   end
@@ -43,3 +51,6 @@ class User < ActiveRecord::Base
   validates_presence_of :login
 end
 
+class Author < ActiveRecord::Base
+  validates_presence_of :login
+end
