@@ -26,7 +26,15 @@ module Stonean
       def depends_on(model_sym, options = {}) 
         define_relationship(model_sym,options)
 
-        validates_presence_of model_sym
+        # Optional presence of handling
+        if options.has_key?(:required) && options[:required] != true
+          if [Symbol, String, Proc].include?(options[:required].class)
+            validates_presence_of model_sym, :if => options[:required]
+          end
+        else
+          validates_presence_of model_sym
+        end
+
         validates_associated model_sym
 
         # Before save functionality to create/update the requisite object
