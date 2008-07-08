@@ -1,5 +1,5 @@
-== 0.4.5 2008-07-08
-  * Add: support for optional dependencies through the :required option. Default (true).
+== 0.5.0 2008-07-08
+  * Add: new options:  validates_presence_if, validates_associated_if to allow for greater control over validation use.
   * Add: Basic test cases of classy-inheritance depends_on functionality.
 == 0.4.4 2008-06-24
   * Fix: :class_name attribute was not being recognized
