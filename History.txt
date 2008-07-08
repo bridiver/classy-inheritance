@@ -1,4 +1,4 @@
-== 4ab0b0 2008-07-07
+== 0.4.5 2008-07-08
   * Add: support for optional dependencies through the :required option. Default (true).
   * Add: Basic test cases of classy-inheritance depends_on functionality.
 == 0.4.4 2008-06-24

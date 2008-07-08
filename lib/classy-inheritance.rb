@@ -27,15 +27,21 @@ module Stonean
         define_relationship(model_sym,options)
 
         # Optional presence of handling
-        if options.has_key?(:required) && options[:required] != true
-          if [Symbol, String, Proc].include?(options[:required].class)
-            validates_presence_of model_sym, :if => options[:required]
+        if options.has_key?(:validates_presence_if) && options[:validates_presence_if] != true
+          if [Symbol, String, Proc].include?(options[:validates_presence_if].class)
+            validates_presence_of model_sym, :if => options[:validates_presence_if]
           end
         else
           validates_presence_of model_sym
         end
 
-        validates_associated model_sym
+        if options.has_key?(:validates_associated_if) && options[:validates_associated_if] != true
+          if [Symbol, String, Proc].include?(options[:validates_assoicated_if].class)
+            validates_associated model_sym, :if => options[:validates_associated_if]
+          end
+        else
+          validates_associated model_sym
+        end
 
         # Before save functionality to create/update the requisite object
         define_save_method(model_sym, options[:as])
@@ -71,9 +77,19 @@ module Stonean
 
       private
 
+      def classy_options
+        [:as, :attrs, :prefix, :validates_presence_if, :validates_associated_if]
+      end
+
+      def delete_classy_options(options, *keepers)
+        options.delete_if do |key,value|
+          classy_options.include?(key) && !keepers.include?(key)
+        end
+        options
+      end
+
       def define_relationship(model_sym, options)
-        opts = options.dup
-        [:attrs, :prefix, :required].each{|key| opts.delete(key)}
+        opts = delete_classy_options(options.dup, :as)
         if opts[:as]
           as_opt = opts.delete(:as)
           opts = polymorphic_constraints(as_opt).merge(opts)
@@ -85,12 +101,17 @@ module Stonean
 
       def define_save_method(model_sym, polymorphic_name = nil)
         define_method "save_requisite_#{model_sym}" do
+          # Return unless the association exists
+          eval("return unless self.#{model_sym}")
+
+          # Set the polymorphic type and id before saving
           if polymorphic_name
             eval("self.#{model_sym}.#{polymorphic_name}_type = self.class.name")
             eval("self.#{model_sym}.#{polymorphic_name}_id = self.id")
           end
 
           if polymorphic_name
+            # Save only if it's an update, has_one creates automatically
             eval <<-SAVEIT
               unless self.#{model_sym}.new_record?
                 self.#{model_sym}.save

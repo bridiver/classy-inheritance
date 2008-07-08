@@ -16,6 +16,10 @@ class TestClassyInheritance < Test::Unit::TestCase
     assert ActiveRecord::Base.respond_to?(:depends_on)
   end
   
+  def test_user_should_respond_to_find_with_profile
+    assert User.respond_to?(:find_with_profile)
+  end
+
   def test_user_should_respond_to_first_name
     assert @user.respond_to?(:first_name)
   end
