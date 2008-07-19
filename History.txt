@@ -1,3 +1,7 @@
+== 0.6.0 2008-07-18
+  * Add: new option:  postfix
+  * Add: Expanded prefix,postfix functionality to either accept true or values to prefix/postix attribute with.
+  * Add: Tests to support new options
 == 0.5.0 2008-07-08
   * Add: new options:  validates_presence_if, validates_associated_if to allow for greater control over validation use.
   * Add: Basic test cases of classy-inheritance depends_on functionality.

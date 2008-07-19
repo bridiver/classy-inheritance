@@ -50,7 +50,7 @@ module Stonean
         define_find_with_method(model_sym)
 
         if options[:as]
-          define_can_be_method_on_requisite_class(model_sym, options[:as])
+          define_can_be_method_on_requisite_class(options[:class_name] || model_sym, options[:as])
         end
 
         options[:attrs].each{|attr| define_accessors(model_sym, attr, options)}
@@ -78,7 +78,7 @@ module Stonean
       private
 
       def classy_options
-        [:as, :attrs, :prefix, :validates_presence_if, :validates_associated_if]
+        [:as, :attrs, :prefix, :postfix, :validates_presence_if, :validates_associated_if]
       end
 
       def delete_classy_options(options, *keepers)
@@ -145,7 +145,15 @@ module Stonean
       end
 
       def define_accessors(model_sym, attr, options)
-        accessor_method_name = ( options[:prefix] ? "#{model_sym}_#{attr}" : attr)
+        accessor_method_name = attr
+
+        if options[:prefix]
+          accessor_method_name = (options[:prefix] == true) ? "#{model_sym}_#{accessor_method_name}" : "#{options[:prefix]}_#{accessor_method_name}"
+        end
+
+        if options[:postfix]
+          accessor_method_name = (options[:postfix] == true) ? "#{accessor_method_name}_#{model_sym}" : "#{accessor_method_name}_#{options[:postfix]}"
+        end
 
         define_method accessor_method_name do
           eval("self.#{model_sym} ? self.#{model_sym}.#{attr} : nil")
