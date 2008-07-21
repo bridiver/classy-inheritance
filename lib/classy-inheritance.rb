@@ -1,6 +1,7 @@
 $:.unshift(File.dirname(__FILE__)) unless
   $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
 
+=begin
 module ActiveRecord::Validations::ClassMethods
   def validates_associated(association, options = {})
     class_eval do
@@ -15,6 +16,7 @@ module ActiveRecord::Validations::ClassMethods
     end
   end
 end
+=end
 
 module Stonean
   module ClassyInheritance

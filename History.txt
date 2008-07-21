@@ -1,3 +1,5 @@
+== 0.6.1 2008-07-21
+  * Removed validates_associated override, was causing issues.
 == 0.6.0 2008-07-18
   * Add: new option:  postfix
   * Add: Expanded prefix,postfix functionality to either accept true or values to prefix/postix attribute with.
