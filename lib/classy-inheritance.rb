@@ -1,22 +1,23 @@
 $:.unshift(File.dirname(__FILE__)) unless
   $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
 
-=begin
+
 module ActiveRecord::Validations::ClassMethods
-  def validates_associated(association, options = {})
-    class_eval do
-      validates_each(association) do |record, associate_name, value|
-        associate = record.send(associate_name)
-        if associate && !associate.valid?
-          associate.errors.each do |key, value|
-            record.errors.add(key, value)
-          end
+  def validates_associated(*attr_names)
+    configuration = { :message => ActiveRecord::Errors.default_error_messages[:invalid], :on => :save }
+    configuration.update(attr_names.extract_options!)
+
+    validates_each(attr_names, configuration) do |record, attr_name, value|
+      associate = record.send(attr_name)
+      if associate && !associate.valid?
+        associate.errors.each do |key, value|
+          record.errors.add(key, value)
         end
       end
     end
   end
 end
-=end
+                                  
 
 module Stonean
   module ClassyInheritance
@@ -38,7 +39,7 @@ module Stonean
         end
 
         if options.has_key?(:validates_associated_if) && options[:validates_associated_if] != true
-          if [Symbol, String, Proc].include?(options[:validates_assoicated_if].class)
+          if [Symbol, String, Proc].include?(options[:validates_associated_if].class)
             validates_associated model_sym, :if => options[:validates_associated_if]
           end
         else
