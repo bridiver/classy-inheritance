@@ -11,7 +11,7 @@ module ActiveRecord::Validations::ClassMethods
       associate = record.send(attr_name)
       if associate && !associate.valid?
         associate.errors.each do |key, value|
-          record.errors.add(key, value)
+          record.errors.add(key, value) unless record.errors[key]
         end
       end
     end

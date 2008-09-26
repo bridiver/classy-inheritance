@@ -57,5 +57,14 @@ class TestClassyInheritance < Test::Unit::TestCase
     
     assert @user.valid?
   end
+
+  def test_user_should_have_nice_error_message
+    @user = User.new(:first_name => "andy")
+    @user.valid?
+
+    assert @user.errors.full_messages.include?("Last name can't be blank")
+    assert @user.errors.full_messages.include?("Email can't be blank")
+    assert @user.errors.full_messages.include?("Login can't be blank")
+  end
   
 end
