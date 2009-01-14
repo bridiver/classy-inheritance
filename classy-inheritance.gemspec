@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Andrew Stone"]
-  s.date = %q{2008-09-24}
+  s.date = %q{2009-01-13}
   s.description = %q{Adds a depends_on class method to your ActiveRecord model so that you can define requisite objects.}
   s.email = ["andy@stonean.com"]
   s.extra_rdoc_files = ["History.txt", "License.txt", "Manifest.txt", "PostInstall.txt", "README.txt", "website/index.txt"]
