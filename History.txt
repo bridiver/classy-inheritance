@@ -1,3 +1,5 @@
+== 0.6.3 2009-01-13
+  * Fixed validations for prefix and postfix - johnsbrn
 == 0.6.2 2008-09-25
   * Added back validates_associated override.
 == 0.6.1 2008-07-21

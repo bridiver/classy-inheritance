@@ -3,15 +3,20 @@ $:.unshift(File.dirname(__FILE__)) unless
 
 
 module ActiveRecord::Validations::ClassMethods
-  def validates_associated(*attr_names)
-    configuration = { :message => ActiveRecord::Errors.default_error_messages[:invalid], :on => :save }
-    configuration.update(attr_names.extract_options!)
-
-    validates_each(attr_names, configuration) do |record, attr_name, value|
+  def validates_associated_dependent(model_sym, options, configuration = {})
+    configuration = { :message => ActiveRecord::Errors.default_error_messages[:invalid], :on => :save }.update(configuration)
+    
+    validates_each(model_sym, configuration) do |record, attr_name, value|
       associate = record.send(attr_name)
       if associate && !associate.valid?
         associate.errors.each do |key, value|
-          record.errors.add(key, value) unless record.errors[key]
+          if options[:prefix]
+            key = (options[:prefix] == true) ? "#{model_sym}_#{key}" : "#{options[:prefix]}_#{key}"
+          end
+          if options[:postfix]
+            key = (options[:postfix] == true) ? "#{key}_#{model_sym}" : "#{key}_#{options[:postfix]}"
+          end
+          record.errors.add(key, value)
         end
       end
     end
@@ -40,10 +45,10 @@ module Stonean
 
         if options.has_key?(:validates_associated_if) && options[:validates_associated_if] != true
           if [Symbol, String, Proc].include?(options[:validates_associated_if].class)
-            validates_associated model_sym, :if => options[:validates_associated_if]
+            validates_associated_dependent model_sym, options, :if => options[:validates_associated_if]
           end
         else
-          validates_associated model_sym
+          validates_associated_dependent model_sym, options
         end
 
         # Before save functionality to create/update the requisite object
