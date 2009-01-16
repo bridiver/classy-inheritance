@@ -7,11 +7,8 @@ Gem::Specification.new do |s|
   s.date = %q{2009-01-13}
   s.description = %q{Adds a depends_on class method to your ActiveRecord model so that you can define requisite objects.}
   s.email = ["andy@stonean.com"]
-  s.extra_rdoc_files = ["History.txt", "License.txt", "Manifest.txt", "PostInstall.txt", "README.txt", "website/index.txt"]
-  s.files = ["History.txt", "License.txt", "Manifest.txt", "PostInstall.txt", "README", "README.txt", "Rakefile", "config/hoe.rb", "config/requirements.rb", "lib/classy-inheritance.rb", "lib/classy-inhe
-ritance/version.rb", "script/console", "script/destroy", "script/generate", "script/txt2html", "setup.rb", "tasks/deployment.rake", "tasks/environment.rake", "tasks/website.rake", "test/test_classy-inhe
-ritance.rb", "test/test_helper.rb", "website/index.html", "website/index.txt", "website/javascripts/rounded_corners_lite.inc.js", "website/stylesheets/screen.css", "website/template.html.erb", "test/tes
-t_polymorphic_associations.rb", "test/test_with_optional_dependency.rb", "test/test_with_prefix_postfix.rb", "test/test_with_standard_attributes.rb"]
+  s.extra_rdoc_files = ["History.txt", "License.txt", "Manifest.txt", "README.txt", "website/index.txt"]
+  s.files = ["History.txt", "License.txt", "Manifest.txt", "PostInstall.txt", "README.txt", "Rakefile", "lib/classy-inheritance.rb", "test/test_classy-inheritance.rb", "test/test_helper.rb", "test/test_polymorphic_associations.rb", "test/test_with_optional_dependency.rb", "test/test_with_prefix_postfix.rb", "test/test_with_standard_attributes.rb"]
   s.has_rdoc = true
   s.homepage = %q{http://classyinherit.rubyforge.org}
   s.post_install_message = %q{}
