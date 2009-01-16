@@ -1,33 +1,9 @@
-$:.unshift(File.dirname(__FILE__)) unless
-  $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
-
-
-module ActiveRecord::Validations::ClassMethods
-  def validates_associated_dependent(model_sym, options, configuration = {})
-    configuration = { :message => ActiveRecord::Errors.default_error_messages[:invalid], :on => :save }.update(configuration)
-    
-    validates_each(model_sym, configuration) do |record, attr_name, value|
-      associate = record.send(attr_name)
-      if associate && !associate.valid?
-        associate.errors.each do |key, value|
-          if options[:prefix]
-            key = (options[:prefix] == true) ? "#{model_sym}_#{key}" : "#{options[:prefix]}_#{key}"
-          end
-          if options[:postfix]
-            key = (options[:postfix] == true) ? "#{key}_#{model_sym}" : "#{key}_#{options[:postfix]}"
-          end
-          record.errors.add(key, value)
-        end
-      end
-    end
-  end
-end
-                                  
-
 module Stonean
   module ClassyInheritance
-    def self.included(base)
-      base.extend Stonean::ClassyInheritance::ClassMethods
+    VERSION = '0.6.3'
+
+    def self.version
+      VERSION
     end
 
     module ClassMethods
@@ -48,7 +24,7 @@ module Stonean
             validates_associated_dependent model_sym, options, :if => options[:validates_associated_if]
           end
         else
-          validates_associated_dependent model_sym, options
+          validates_associated_dependent model_sym, options 
         end
 
         # Before save functionality to create/update the requisite object
@@ -184,7 +160,7 @@ module Stonean
         requisite_klass = eval(klass)
         unless requisite_klass.respond_to?(self.name.underscore.to_sym)
           requisite_klass.send :can_be, self.name.underscore, 
-                                      :as => polymorphic_name 
+            :as => polymorphic_name 
         end
       end
 
@@ -195,4 +171,32 @@ module Stonean
     end # ClassMethods
   end # ClassyInheritance module
 end # Stonean module
-ActiveRecord::Base.send :include, Stonean::ClassyInheritance
+
+if Object.const_defined?("ActiveRecord") && ActiveRecord.const_defined?("Base")
+  module ActiveRecord::Validations::ClassMethods
+
+    def validates_associated_dependent(model_sym, options, configuration = {})
+      configuration = { :message => ActiveRecord::Errors.default_error_messages[:invalid], :on => :save }.update(configuration)
+
+      validates_each(model_sym, configuration) do |record, attr_name, value|
+        associate = record.send(attr_name)
+        if associate && !associate.valid?
+          associate.errors.each do |key, value|
+            if options[:prefix]
+              key = (options[:prefix] == true) ? "#{model_sym}_#{key}" : "#{options[:prefix]}_#{key}"
+            end
+            if options[:postfix]
+              key = (options[:postfix] == true) ? "#{key}_#{model_sym}" : "#{key}_#{options[:postfix]}"
+            end
+            record.errors.add(key, value) unless record.errors[key]
+          end
+        end
+      end
+    end
+  end
+                                    
+
+  ActiveRecord::Base.class_eval do
+    extend Stonean::ClassyInheritance::ClassMethods
+  end
+end

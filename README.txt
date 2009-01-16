@@ -1,32 +1,37 @@
-= classy-inheritance
-
-* FIX (url)
+classy-inheritance
+    by Andrew Stone
+    http://stonean.com
 
 == DESCRIPTION:
 
-FIX (describe your package)
+Classy Inheritance adds a depends_on class method to your ActiveRecord model so that you can define requisite objects.
 
-== FEATURES/PROBLEMS:
-
-* FIX (list of features or problems)
+This functionality is provided using the existing ActiveRecord methods without monkey patching any core code. Essentially, it provides an easy interface to generate code that anyone could add to their model to receive the same result. Depending on the parameters to your depends_on call, it may add some of the following methods: validates_presence_of, validates_associated, has_one or belongs_to.
 
 == SYNOPSIS:
 
-  FIX (code sample of usage)
+class User < ActiveRecord::Base
+  depends_on :profile, :attrs => [:first_name, :last_name, :email]
+end
 
-== REQUIREMENTS:
+# Pass-through methods to profile attributes.  Now you don't have to manage
+# two different objects.
+@user.first_name = 'Andrew'
+@user.last_name = 'Stone'
+@user.email = 'andy@stonean.com'
 
-* FIX (list of requirements)
+# Manages profile relationship for you
+@user.save
 
 == INSTALL:
 
-* FIX (sudo gem install, anything else)
+sudo gem install classy-inheritance
 
 == LICENSE:
 
 (The MIT License)
 
-Copyright (c) 2008 FIX
+Copyright (c) 2009 Andrew Stone
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

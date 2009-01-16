@@ -8,10 +8,6 @@ class TestClassyInheritance < Test::Unit::TestCase
     @user = User.new
   end
   
-  def test_active_record_should_have_classy_inheritance_included
-    assert ActiveRecord::Base.included_modules.include?(Stonean::ClassyInheritance)
-  end
-  
   def test_active_record_should_respond_to_depends_on
     assert ActiveRecord::Base.respond_to?(:depends_on)
   end
