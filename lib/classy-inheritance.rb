@@ -1,6 +1,6 @@
 module Stonean
   module ClassyInheritance
-    VERSION = '0.6.3.1'
+    VERSION = '0.6.3.2'
 
     def self.version
       VERSION
