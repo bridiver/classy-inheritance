@@ -1,3 +1,40 @@
+module ActiveRecord
+  module Associations
+    class HasOneAssociation
+      
+      def set_belongs_to_association_for(record)
+        if @reflection.options[:as]
+          record["#{@reflection.options[:as]}_id"]   = @owner.id unless @owner.new_record?
+          record["#{@reflection.options[:as]}_type"] = @owner.class.base_class.name.to_s
+        else
+          record[@reflection.primary_key_name] = @reflection.options.has_key?(:primary_key) ? @owner.send(@reflection.options[:primary_key]) : @owner.id unless @owner.new_record?
+        end
+      end
+      
+      private 
+      def new_record(replace_existing)
+        # Make sure we load the target first, if we plan on replacing the existing
+        # instance. Otherwise, if the target has not previously been loaded
+        # elsewhere, the instance we create will get orphaned.
+        load_target if replace_existing
+        record = @reflection.klass.send(:with_scope, :create => construct_scope[:create]) do
+          yield @reflection
+        end
+
+        if replace_existing
+          replace(record, true) 
+        else
+          puts "test"
+          record[@reflection.primary_key_name] = @reflection.options.has_key?(:primary_key) ? @owner.send(@reflection.options[:primary_key]) : @owner.id unless @owner.new_record?
+          self.target = record
+        end
+
+        record
+      end
+    end
+  end
+end
+
 module Stonean
   module ClassyInheritance
     VERSION = '0.6.5'
@@ -5,7 +42,7 @@ module Stonean
     def self.version
       VERSION
     end
-
+    
     module ClassMethods
       
       # fix active record has_one primary key bug - http://rails.lighthouseapp.com/projects/8994/tickets/1756-has_one-with-foreign_key-primary_key-bug
@@ -21,8 +58,9 @@ module Stonean
           method_name = "has_one_after_save_for_#{reflection.name}".to_sym
           define_method(method_name) do
             association = instance_variable_get(ivar) if instance_variable_defined?(ivar)
-            if !association.nil? && (new_record? || association.new_record? || association[reflection.primary_key_name] != id)
-              primary_key = reflection.options[:primary_key] || :id
+            
+            primary_key = reflection.options[:primary_key] || :id
+            if !association.nil? && (new_record? || association.new_record? || association[reflection.primary_key_name] != send(primary_key))
               association[reflection.primary_key_name] = send(primary_key)
               association.save(true)
             end
@@ -230,9 +268,9 @@ if Object.const_defined?("ActiveRecord") && ActiveRecord.const_defined?("Base")
       end
     end
   end
-                                    
-
+  
   ActiveRecord::Base.class_eval do
     extend Stonean::ClassyInheritance::ClassMethods
   end
+  
 end
