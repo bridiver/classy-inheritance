@@ -24,7 +24,6 @@ module ActiveRecord
         if replace_existing
           replace(record, true) 
         else
-          puts "test"
           record[@reflection.primary_key_name] = @reflection.options.has_key?(:primary_key) ? @owner.send(@reflection.options[:primary_key]) : @owner.id unless @owner.new_record?
           self.target = record
         end

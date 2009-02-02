@@ -1,7 +1,9 @@
+== 0.6.7 2009-02-01
+  * Forgot to remove some debugging code -johnsbrn
 == 0.6.6 2009-02-01
-  * More comprehensive fix for has_one bug
+  * More comprehensive fix for has_one bug - johnsbrn
 == 0.6.5 2009-02-01
-  * Add fix for has_one primary key bug - http://rails.lighthouseapp.com/projects/8994/tickets/1756-has_one-with-foreign_key-primary_key-bug
+  * Add fix for has_one primary key bug - http://rails.lighthouseapp.com/projects/8994/tickets/1756-has_one-with-foreign_key-primary_key-bug - johnsbrn
 == 0.6.4 2009-02-01
   * Updated deprecated default error messages - johnsbrn
   * Added has_dependency for non-polymorphic has_one - johnsbrn
