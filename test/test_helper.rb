@@ -30,7 +30,7 @@ class SetupTestTables < ActiveRecord::Migration
     create_table :account_logins, :force => true do |t|
       t.string :login
       t.string :password
-      t.integer :account_id
+      t.string :account_email
 
       t.timestamps
     end

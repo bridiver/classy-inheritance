@@ -1,12 +1,43 @@
 module Stonean
   module ClassyInheritance
-    VERSION = '0.6.3.2'
+    VERSION = '0.6.5'
 
     def self.version
       VERSION
     end
 
     module ClassMethods
+      
+      # fix active record has_one primary key bug - http://rails.lighthouseapp.com/projects/8994/tickets/1756-has_one-with-foreign_key-primary_key-bug
+      def has_one(association_id, options = {})
+        if options[:through]
+          reflection = create_has_one_through_reflection(association_id, options)
+          association_accessor_methods(reflection, ActiveRecord::Associations::HasOneThroughAssociation)
+        else
+          reflection = create_has_one_reflection(association_id, options)
+
+          ivar = "@#{reflection.name}"
+
+          method_name = "has_one_after_save_for_#{reflection.name}".to_sym
+          define_method(method_name) do
+            association = instance_variable_get(ivar) if instance_variable_defined?(ivar)
+            if !association.nil? && (new_record? || association.new_record? || association[reflection.primary_key_name] != id)
+              primary_key = reflection.options[:primary_key] || :id
+              association[reflection.primary_key_name] = send(primary_key)
+              association.save(true)
+            end
+          end
+          after_save method_name
+
+          add_single_associated_validation_callbacks(reflection.name) if options[:validate] == true
+          association_accessor_methods(reflection, ActiveRecord::Associations::HasOneAssociation)
+          association_constructor_method(:build,  reflection, ActiveRecord::Associations::HasOneAssociation)
+          association_constructor_method(:create, reflection, ActiveRecord::Associations::HasOneAssociation)
+
+          configure_dependency_for_has_one(reflection)
+        end
+      end
+      
       def depends_on(model_sym, options = {}) 
         define_relationship(model_sym,options)
 
