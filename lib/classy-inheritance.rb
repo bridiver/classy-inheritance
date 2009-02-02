@@ -40,7 +40,10 @@ module Stonean
         options[:attrs].each{|attr| define_accessors(model_sym, attr, options)}
       end
 
-
+      def has_dependency(model_sym, options = {})
+        depends_on(model_sym, options.update(:has_dependency => true))
+      end
+      
       def can_be(model_sym, options = {})
         unless options[:as]
           raise ArgumentError, ":as attribute required when calling can_be"
@@ -62,7 +65,7 @@ module Stonean
       private
 
       def classy_options
-        [:as, :attrs, :prefix, :postfix, :validates_presence_if, :validates_associated_if]
+        [:as, :attrs, :has_dependency, :prefix, :postfix, :validates_presence_if, :validates_associated_if]
       end
 
       def delete_classy_options(options, *keepers)
@@ -77,6 +80,8 @@ module Stonean
         if opts[:as]
           as_opt = opts.delete(:as)
           opts = polymorphic_constraints(as_opt).merge(opts)
+          has_one model_sym, opts
+        elsif options[:has_dependency]
           has_one model_sym, opts
         else
           belongs_to model_sym, opts
@@ -138,7 +143,7 @@ module Stonean
         if options[:postfix]
           accessor_method_name = (options[:postfix] == true) ? "#{accessor_method_name}_#{model_sym}" : "#{accessor_method_name}_#{options[:postfix]}"
         end
-
+        
         define_method accessor_method_name do
           eval("self.#{model_sym} ? self.#{model_sym}.#{attr} : nil")
         end
@@ -176,7 +181,7 @@ if Object.const_defined?("ActiveRecord") && ActiveRecord.const_defined?("Base")
   module ActiveRecord::Validations::ClassMethods
 
     def validates_associated_dependent(model_sym, options, configuration = {})
-      configuration = { :message => ActiveRecord::Errors.default_error_messages[:invalid], :on => :save }.update(configuration)
+      configuration = { :message => I18n.translate('activerecord.errors.messages')[:invalid], :on => :save }.update(configuration)
 
       validates_each(model_sym, configuration) do |record, attr_name, value|
         associate = record.send(attr_name)

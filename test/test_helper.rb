@@ -19,6 +19,22 @@ class SetupTestTables < ActiveRecord::Migration
       t.timestamps
     end
     
+    create_table :accounts, :force => true do |t|
+      t.string :first_name
+      t.string :last_name
+      t.string :email
+
+      t.timestamps
+    end
+    
+    create_table :account_logins, :force => true do |t|
+      t.string :login
+      t.string :password
+      t.integer :account_id
+
+      t.timestamps
+    end
+    
     create_table :users, :force => true do |t|
       t.string :login
       t.integer :profile_id
@@ -82,6 +98,8 @@ class SetupTestTables < ActiveRecord::Migration
   end
   
   def self.down
+    drop_table :accounts
+    drop_table :account_logins
     drop_table :authors
     drop_table :artists
     drop_table :users
@@ -98,6 +116,14 @@ SetupTestTables.migrate(:up)
 
 class Profile < ActiveRecord::Base
   validates_presence_of :first_name, :last_name, :email
+end
+
+class Account < ActiveRecord::Base
+  validates_presence_of :first_name, :last_name, :email
+end
+
+class AccountLogin < ActiveRecord::Base
+  validates_presence_of :login, :password
 end
 
 class User < ActiveRecord::Base

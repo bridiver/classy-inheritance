@@ -1,3 +1,6 @@
+== 0.6.4 2009-02-01
+  * Updated deprecated default error messages - johnsbrn
+  * Added has_dependency for non-polymorphic has_one - johnsbrn
 == 0.6.3 2009-01-13
   * Fixed validations for prefix and postfix - johnsbrn
 == 0.6.2 2008-09-25
