@@ -7,7 +7,10 @@ module ActiveRecord
           record["#{@reflection.options[:as]}_id"]   = @owner.id unless @owner.new_record?
           record["#{@reflection.options[:as]}_type"] = @owner.class.base_class.name.to_s
         else
-          record[@reflection.primary_key_name] = @reflection.options.has_key?(:primary_key) ? @owner.send(@reflection.options[:primary_key]) : @owner.id unless @owner.new_record?
+          unless @owner.new_record?
+            primary_key = @reflection.options[:primary_key] || :id
+            record[@reflection.primary_key_name] = @owner.send(primary_key)
+          end
         end
       end
       
@@ -24,7 +27,10 @@ module ActiveRecord
         if replace_existing
           replace(record, true) 
         else
-          record[@reflection.primary_key_name] = @reflection.options.has_key?(:primary_key) ? @owner.send(@reflection.options[:primary_key]) : @owner.id unless @owner.new_record?
+          unless @owner.new_record?
+            primary_key = @reflection.options[:primary_key] || :id
+            record[@reflection.primary_key_name] = @owner.send(primary_key)
+          end
           self.target = record
         end
 
