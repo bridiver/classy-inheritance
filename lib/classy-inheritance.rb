@@ -65,7 +65,7 @@ end
 
 module Stonean
   module ClassyInheritance
-    VERSION = '0.6.8.1'
+    VERSION = '0.6.8.2'
 
     def self.version
       VERSION
@@ -136,7 +136,7 @@ module Stonean
         define_find_with_method(model_sym)
 
         if options[:as]
-          define_can_be_method_on_requisite_class(options[:class_name] || model_sym, options[:as])
+          define_can_be_method_on_requisite_class(options[:class_name] || model_sym.to_s.classify, options[:as])
         end
 
         options[:attrs].each{|attr| define_accessors(model_sym, attr, options)}
@@ -263,7 +263,7 @@ module Stonean
       end
 
       def define_can_be_method_on_requisite_class(model_sym, polymorphic_name)
-        klass = model_sym.to_s.classify
+        klass = model_sym.to_s
         requisite_klass = eval(klass)
         unless requisite_klass.respond_to?(self.name.underscore.to_sym)
           requisite_klass.send :can_be, self.name.underscore, 
