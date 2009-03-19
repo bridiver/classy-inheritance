@@ -1,3 +1,5 @@
+== 0.6.8.1 2009-03-19
+  * Update for Rails 2.3 - johnsbrn
 == 0.6.8 2009-02-03
   * Make has_one fix consistent with edge Rails - johnsbrn
 == 0.6.7 2009-02-01
