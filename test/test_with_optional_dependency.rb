@@ -1,16 +1,17 @@
 require File.dirname(__FILE__) + '/test_helper.rb'
 
 class TestWithOptionalDependency < Test::Unit::TestCase
-  # Turn off the validates_presence_of call
-  Author.depends_on :profile, :validates_presence_if => false, 
-    :attrs => [:first_name, :last_name, :email]
-  
-  # Turn off the validates_presence_of and the validates_associated calls
-  Artist.depends_on :profile, :validates_presence_if => false, 
-    :validates_associated_if => false,
-    :attrs => [:first_name, :last_name, :email]
 
   def setup
+    # Turn off the validates_presence_of call
+    Author.depends_on :profile, :validates_presence_if => false, 
+      :attrs => [:first_name, :last_name, :email]
+
+    # Turn off the validates_presence_of and the validates_associated calls
+    Artist.depends_on :profile, :validates_presence_if => false, 
+      :validates_associated_if => false,
+      :attrs => [:first_name, :last_name, :email]
+    
     @author = Author.new
     @artist = Artist.new
   end

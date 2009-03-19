@@ -1,11 +1,12 @@
 require File.dirname(__FILE__) + '/test_helper.rb'
 
-Account.has_dependency :account_login, :attrs => [:login, :password], :foreign_key => :account_email, :primary_key => :email
-
 class TestHasDependency < Test::Unit::TestCase
 
   def setup
+    Account.has_dependency :account_login, :attrs => [:login, :password], :foreign_key => :account_email, :primary_key => :email
+    Database.has_dependency :database_login, :attrs => [:login]
     @account = Account.new
+    @database = Database.new
   end
   
   def test_active_record_should_respond_to_depends_on
@@ -30,6 +31,17 @@ class TestHasDependency < Test::Unit::TestCase
   
   def test_account_should_respond_to_password=
     assert @account.respond_to?(:password=)
+  end
+  
+  def test_profile_should_create_author_record
+    @database.name = 'page'
+    @database.login = 'joe'
+  
+    @database.save!
+  
+    @database_login = DatabaseLogin.find(:first, :conditions => {:database_id => @database.id})
+  
+    assert_equal 'joe', @database_login.login
   end
   
   def test_account_should_create_account_login_record

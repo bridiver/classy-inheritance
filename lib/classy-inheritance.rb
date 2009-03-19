@@ -1,7 +1,9 @@
+require 'active_record/version'
 module ActiveRecord
   module Associations
     class HasOneAssociation
       
+      # this is fixed in 2.3, but it doesn't hurt to leave it here
       def set_belongs_to_association_for(record)
         if @reflection.options[:as]
           record["#{@reflection.options[:as]}_id"]   = @owner.id unless @owner.new_record?
@@ -15,6 +17,7 @@ module ActiveRecord
       end
       
       private 
+      #this is still not fixed in 2.3
       def new_record(replace_existing)
         # Make sure we load the target first, if we plan on replacing the existing
         # instance. Otherwise, if the target has not previously been loaded
@@ -38,6 +41,26 @@ module ActiveRecord
       end
     end
   end
+  
+  if ActiveRecord::VERSION::MAJOR == 2 && ActiveRecord::VERSION::MINOR == 3
+
+    module AutosaveAssociation
+    
+      # fix active record has_one primary key bug rails 2.3 - http://rails.lighthouseapp.com/projects/8994/tickets/1756-has_one-with-foreign_key-primary_key-bug
+      def save_has_one_association(reflection)
+        if (association = association_instance_get(reflection.name)) && !association.target.nil?
+          primary_key = reflection.options[:primary_key] || :id  
+          if reflection.options[:autosave] && association.marked_for_destruction?
+            association.destroy
+          elsif new_record? || association.new_record? || association[reflection.primary_key_name] != send(primary_key) || reflection.options[:autosave]
+            association[reflection.primary_key_name] = send(primary_key)
+            association.save(false)
+          end
+        end
+      end
+    end
+
+  end
 end
 
 module Stonean
@@ -50,35 +73,40 @@ module Stonean
     
     module ClassMethods
       
-      # fix active record has_one primary key bug - http://rails.lighthouseapp.com/projects/8994/tickets/1756-has_one-with-foreign_key-primary_key-bug
-      def has_one(association_id, options = {})
-        if options[:through]
-          reflection = create_has_one_through_reflection(association_id, options)
-          association_accessor_methods(reflection, ActiveRecord::Associations::HasOneThroughAssociation)
-        else
-          reflection = create_has_one_reflection(association_id, options)
+      
+      # fix active record has_one primary key bug rails 2.2.2 - http://rails.lighthouseapp.com/projects/8994/tickets/1756-has_one-with-foreign_key-primary_key-bug
+      if ActiveRecord::VERSION::MAJOR == 2 && ActiveRecord::VERSION::MINOR == 2
 
-          ivar = "@#{reflection.name}"
+        def has_one(association_id, options = {})
+          if options[:through]
+            reflection = create_has_one_through_reflection(association_id, options)
+            association_accessor_methods(reflection, ActiveRecord::Associations::HasOneThroughAssociation)
+          else
+            reflection = create_has_one_reflection(association_id, options)
 
-          method_name = "has_one_after_save_for_#{reflection.name}".to_sym
-          define_method(method_name) do
-            association = instance_variable_get(ivar) if instance_variable_defined?(ivar)
+            ivar = "@#{reflection.name}"
+
+            method_name = "has_one_after_save_for_#{reflection.name}".to_sym
+            define_method(method_name) do
+              association = instance_variable_get(ivar) if instance_variable_defined?(ivar)
             
-            primary_key = reflection.options[:primary_key] || :id
-            if !association.nil? && (new_record? || association.new_record? || association[reflection.primary_key_name] != send(primary_key))
-              association[reflection.primary_key_name] = send(primary_key)
-              association.save(true)
+              primary_key = reflection.options[:primary_key] || :id
+              if !association.nil? && (new_record? || association.new_record? || association[reflection.primary_key_name] != send(primary_key))
+                association[reflection.primary_key_name] = send(primary_key)
+                association.save(true)
+              end
             end
+            after_save method_name
+
+            add_single_associated_validation_callbacks(reflection.name) if options[:validate] == true
+            association_accessor_methods(reflection, ActiveRecord::Associations::HasOneAssociation)
+            association_constructor_method(:build,  reflection, ActiveRecord::Associations::HasOneAssociation)
+            association_constructor_method(:create, reflection, ActiveRecord::Associations::HasOneAssociation)
+
+            configure_dependency_for_has_one(reflection)
           end
-          after_save method_name
-
-          add_single_associated_validation_callbacks(reflection.name) if options[:validate] == true
-          association_accessor_methods(reflection, ActiveRecord::Associations::HasOneAssociation)
-          association_constructor_method(:build,  reflection, ActiveRecord::Associations::HasOneAssociation)
-          association_constructor_method(:create, reflection, ActiveRecord::Associations::HasOneAssociation)
-
-          configure_dependency_for_has_one(reflection)
         end
+        
       end
       
       def depends_on(model_sym, options = {}) 

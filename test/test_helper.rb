@@ -1,6 +1,8 @@
 require 'rubygems'
 require 'activerecord'
 
+ActiveRecord.load_all!
+
 require 'test/unit'
 require File.dirname(__FILE__) + '/../lib/classy-inheritance'
 
@@ -56,6 +58,17 @@ class SetupTestTables < ActiveRecord::Migration
       t.timestamps
     end
 
+    create_table :databases, :force => true do |t|
+      t.string :name
+      t.timestamps
+    end
+    
+    create_table :database_logins, :force => true do |t|
+      t.string :login
+      t.integer :database_id
+      t.timestamps
+    end
+    
     create_table :addresses, :force => true do |t|
       t.string :line_one
       t.string :line_two
@@ -116,6 +129,14 @@ SetupTestTables.migrate(:up)
 
 class Profile < ActiveRecord::Base
   validates_presence_of :first_name, :last_name, :email
+end
+
+class Database < ActiveRecord::Base
+  validates_presence_of :name
+end
+
+class DatabaseLogin < ActiveRecord::Base
+  validates_presence_of :login
 end
 
 class Account < ActiveRecord::Base

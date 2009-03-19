@@ -1,10 +1,9 @@
 require File.dirname(__FILE__) + '/test_helper.rb'
 
-User.depends_on :profile, :attrs => [:first_name, :last_name, :email]
-
 class TestClassyInheritance < Test::Unit::TestCase
 
   def setup
+    User.depends_on :profile, :attrs => [:first_name, :last_name, :email]
     @user = User.new
   end
   
